@@ -1,0 +1,23 @@
+.inventory-grid {
+    grid-template-columns: 48px auto 40px;
+
+    @screen sm {
+        grid-template-columns: 48px auto 112px 72px;
+    }
+
+    @screen md {
+        grid-template-columns: 48px 112px auto 112px 72px;
+    }
+
+    @screen lg {
+        grid-template-columns: 48px 112px auto auto 112px 96px 112px;
+    }
+}
+
+.fuse-alert-container {
+    padding: 16px 25px !important;
+}
+
+.border-search-ipt {
+    border-radius: 0px !important;
+}

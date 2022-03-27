@@ -1,0 +1,75 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+    <app-header-base (filteredParam)="formFilter($event)" (formDialogResults)="createGrupo($event)"></app-header-base>
+    <!-- Success -->
+    <fuse-alert [appearance]="'soft'" [dismissible]="true" [dismissed]="true" [name]="'alertBoxUser'" [type]="alert.type" *ngIf="showAlert"
+      [@shake]="alert.type === 'error'" >
+      <div [innerHTML]="alert.message" ></div>
+    </fuse-alert>
+
+
+    <!-- Main -->
+    <div class="flex flex-auto overflow-hidden">
+
+
+      <!-- Products list -->
+      <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+        <ng-container *ngIf="(grupos$ | async) as grupos">
+          <ng-container *ngIf="grupos.length > 0; else noProducts">
+            <div class="grid">
+              <!-- Header -->
+              <div
+                class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                matSort matSortDisableClear>
+                <div>#</div>
+                <div class="hidden md:block" [mat-sort-header]="'nome'">
+                  Nome
+                </div>
+                <div class="hidden sm:block">Acções</div>
+              </div>
+              <!-- Rows -->
+              <ng-container *ngIf="(grupos$ | async) as grupos">
+                <ng-container *ngFor="let grupo of grupos; trackBy: trackByFn">
+                  <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                    <div>{{grupo.id}}</div>
+                    <!-- Nome -->
+                    <div class="hidden md:block truncate">
+                      {{grupo.nome}}
+                    </div>
+                    <!-- Details button -->
+                    <div>
+                      <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button
+                        (click)="openUpdateGrupoDialog(grupo.id)">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                      </button>
+
+                      <button class="min-w-10 min-h-7 h-7 px-2 leading-6 ml-2" mat-stroked-button
+                        (click)="deleteGrupo(grupo.id)">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                      </button>
+                    </div>
+                  </div>
+
+                </ng-container>
+              </ng-container>
+            </div>
+
+            <mat-paginator
+              class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+              [ngClass]="{'pointer-events-none': isLoading}" [length]="pagination.length" [pageIndex]="pagination.page"
+              [pageSize]="pagination.size" [pageSizeOptions]="[5, 10, 25, 100]" [showFirstLastButtons]="true">
+            </mat-paginator>
+
+          </ng-container>
+        </ng-container>
+
+
+        <ng-template #noProducts>
+          <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no products!</div>
+        </ng-template>
+
+      </div>
+
+    </div>
+
+  </div>
